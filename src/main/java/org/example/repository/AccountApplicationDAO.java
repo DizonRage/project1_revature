@@ -1,7 +1,7 @@
 package org.example.repository;
 
-import org.example.repository.dto.AccountApplicationDTO;
-import org.example.repository.dto.AccountDTO;
+import org.example.model.AccountApplication;
+import org.example.model.Account;
 import org.example.util.DatabaseConnectionFactory;
 
 import java.sql.Connection;
@@ -27,7 +27,7 @@ public class AccountApplicationDAO {
         }
     }
 
-    public AccountApplicationDTO findById(int id) throws SQLException {
+    public AccountApplication findById(int id) throws SQLException {
         String sql = "SELECT * FROM account_applications WHERE application_id = ?;";
 
         try (Connection conn = DatabaseConnectionFactory.getConnection();
@@ -35,7 +35,7 @@ public class AccountApplicationDAO {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
-                    return new AccountApplicationDTO(rs.getInt("application_id"), rs.getInt("applicant_id"), rs.getInt("approver_id"), rs.getString("account_type"), rs.getString("status"));
+                    return new AccountApplication(rs.getInt("application_id"), rs.getInt("applicant_id"), rs.getInt("approver_id"), rs.getString("account_type"), rs.getString("status"));
                 }
                 return null;
             }
@@ -43,7 +43,7 @@ public class AccountApplicationDAO {
         }
     }
 
-    public boolean update(AccountApplicationDTO application, int approver_id) throws SQLException{
+    public boolean update(AccountApplication application, int approver_id) throws SQLException{
         String sql = "UPDATE account_applications SET applicant_id = ?, approver_id = ?, status = ? WHERE application_id = ?";
 
         try(Connection conn = DatabaseConnectionFactory.getConnection();

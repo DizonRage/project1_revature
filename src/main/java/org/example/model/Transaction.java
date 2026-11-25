@@ -1,28 +1,28 @@
-package org.example.repository.dto;
+package org.example.model;
 
-public class TransactionDTO {
+public class Transaction {
 
     private int transaction_id;
     private int account_id;
     private String transaction_type;
     private double amount;
 
-    public TransactionDTO() {
+    public Transaction() {
     }
 
-    public TransactionDTO(int transaction_id, int account_id, String transaction_type, double amount) {
+    public Transaction(int transaction_id, int account_id, String transaction_type, double amount) {
         this.transaction_id = transaction_id;
         this.account_id = account_id;
         this.transaction_type = transaction_type;
         this.amount = amount;
     }
 
-    public TransactionDTO(int account_id, double amount) {
+    public Transaction(int account_id, double amount) {
         this.account_id = account_id;
         this.amount = amount;
     }
 
-    public TransactionDTO(int account_id, String transaction_type, double amount) {
+    public Transaction(int account_id, String transaction_type, double amount) {
         this.account_id = account_id;
         this.transaction_type = transaction_type;
         this.amount = amount;

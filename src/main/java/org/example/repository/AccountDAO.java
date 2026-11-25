@@ -1,6 +1,6 @@
 package org.example.repository;
 
-import org.example.repository.dto.AccountDTO;
+import org.example.model.Account;
 import org.example.util.DatabaseConnectionFactory;
 
 import java.sql.Connection;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class AccountDAO {
 
-    public int create(AccountDTO account, int application_id) throws SQLException {
+    public int create(Account account, int application_id) throws SQLException {
         String sql = "INSERT INTO accounts (application_id, account_number, account_type, balance) VALUES (?, ?, ?, ?) RETURNING account_id;";
 
         try(Connection conn = DatabaseConnectionFactory.getConnection();
@@ -31,14 +31,14 @@ public class AccountDAO {
         }
     }
 
-    public AccountDTO findById(int account_id) throws SQLException{
+    public Account findById(int account_id) throws SQLException{
         String sql = "SELECT * FROM accounts WHERE account_id = ?;";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setInt(1, account_id);
             try (ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
-                    return new AccountDTO(rs.getInt("account_id"), rs.getInt("application_id"), rs.getString("account_number"), rs.getString("account_type"), rs.getDouble("balance"));
+                    return new Account(rs.getInt("account_id"), rs.getInt("application_id"), rs.getString("account_number"), rs.getString("account_type"), rs.getDouble("balance"));
                 }
                 return null;
             }
@@ -46,14 +46,14 @@ public class AccountDAO {
         }
     }
 
-    public AccountDTO findByNumber(String account_number) throws SQLException{
+    public Account findByNumber(String account_number) throws SQLException{
         String sql = "SELECT * FROM accounts WHERE account_number = ?;";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setString(1, account_number);
             try (ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
-                    return new AccountDTO(rs.getInt("account_id"), rs.getInt("application_id"), rs.getString("account_number"), rs.getString("account_type"), rs.getDouble("balance"));
+                    return new Account(rs.getInt("account_id"), rs.getInt("application_id"), rs.getString("account_number"), rs.getString("account_type"), rs.getDouble("balance"));
                 }
                 return null;
             }
@@ -61,20 +61,20 @@ public class AccountDAO {
         }
     }
 
-    public List<AccountDTO> findAll() throws SQLException {
-        List<AccountDTO> list = new ArrayList<>();
+    public List<Account> findAll() throws SQLException {
+        List<Account> list = new ArrayList<>();
         String sql = "SELECT * FROM accounts ORDER BY account_id";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                list.add(new AccountDTO(rs.getInt("account_id"), rs.getString("account_number"), rs.getString("account_type"), rs.getDouble("balance")));
+                list.add(new Account(rs.getInt("account_id"), rs.getString("account_number"), rs.getString("account_type"), rs.getDouble("balance")));
             }
         }
         return list;
     }
 
-    public boolean update(AccountDTO account, int id) throws SQLException {
+    public boolean update(Account account, int id) throws SQLException {
         String sql = "UPDATE accounts SET application_id = ?, account_number = ?, account_type = ?, balance = ? WHERE account_id = ?";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {

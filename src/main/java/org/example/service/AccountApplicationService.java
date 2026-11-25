@@ -1,8 +1,8 @@
 package org.example.service;
 
 import org.example.repository.AccountApplicationDAO;
-import org.example.repository.dto.AccountApplicationDTO;
-import org.example.repository.dto.AccountDTO;
+import org.example.model.AccountApplication;
+import org.example.model.Account;
 
 import java.sql.SQLException;
 
@@ -19,11 +19,11 @@ public class AccountApplicationService {
         return accountApplicationDAO.create(id, type);
     }
 
-    public AccountApplicationDTO findApplicationById(int id) throws SQLException{
+    public AccountApplication findApplicationById(int id) throws SQLException{
         return accountApplicationDAO.findById(id);
     }
 
-    public boolean updateApplication(AccountApplicationDTO application, int approver_id) throws SQLException {
+    public boolean updateApplication(AccountApplication application, int approver_id) throws SQLException {
         return accountApplicationDAO.update(application, approver_id);
     }
 }

@@ -1,8 +1,8 @@
 package org.example.repository;
 
-import org.example.repository.dto.AccountDTO;
-import org.example.repository.dto.TransactionDTO;
-import org.example.repository.dto.UserDTO;
+import org.example.model.Account;
+import org.example.model.Transaction;
+import org.example.model.User;
 import org.example.util.DatabaseConnectionFactory;
 
 import java.sql.Connection;
@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 public class TransactionDAO {
 
-    public int create(TransactionDTO transaction) throws SQLException {
+    public int create(Transaction transaction) throws SQLException {
         String sql = "INSERT INTO transactions (account_id, transaction_type, amount) VALUES (?, ?, ?) RETURNING account_id;";
 
         try(Connection conn = DatabaseConnectionFactory.getConnection();
@@ -30,14 +30,14 @@ public class TransactionDAO {
         }
     }
 
-    public TransactionDTO findById(int transaction_id) throws SQLException{
+    public Transaction findById(int transaction_id) throws SQLException{
         String sql = "SELECT * FROM transactions WHERE transaction_id = ?;";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setInt(1, transaction_id);
             try (ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
-                    return new TransactionDTO(rs.getInt("transaction_id"), rs.getInt("account_id"), rs.getString("transaction_type"), rs.getDouble("amount"));
+                    return new Transaction(rs.getInt("transaction_id"), rs.getInt("account_id"), rs.getString("transaction_type"), rs.getDouble("amount"));
                 }
                 return null;
             }
@@ -45,7 +45,7 @@ public class TransactionDAO {
         }
     }
 
-    public boolean update(TransactionDTO transaction, int id) throws SQLException {
+    public boolean update(Transaction transaction, int id) throws SQLException {
         String sql = "UPDATE transactions SET account_id = ?, transaction_type = ?, amount = ? WHERE transaction_id = ?";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {

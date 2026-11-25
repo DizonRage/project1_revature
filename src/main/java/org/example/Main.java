@@ -3,7 +3,7 @@ package org.example;
 //import org.example.controller.BankController;
 import org.example.controller.BankController;
 import org.example.repository.AccountDAO;
-import org.example.repository.dto.AccountDTO;
+import org.example.model.Account;
 import org.example.util.DatabaseConnectionFactory;
 
 import java.sql.Connection;

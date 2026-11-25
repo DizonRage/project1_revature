@@ -1,16 +1,16 @@
-package org.example.repository.dto;
+package org.example.model;
 
-public class AccountDTO {
+public class Account {
     private int account_id;
     private int application_id;
     private String account_number;
     private String account_type;
     private double balance;
 
-    public AccountDTO() {
+    public Account() {
     }
 
-    public AccountDTO(int account_id, int application_id, String account_number, String account_type, double balance) {
+    public Account(int account_id, int application_id, String account_number, String account_type, double balance) {
         this.account_id = account_id;
         this.application_id = application_id;
         this.account_number = account_number;
@@ -18,14 +18,14 @@ public class AccountDTO {
         this.balance = balance;
     }
 
-    public AccountDTO(int application_id, String account_number, String account_type, double balance) {
+    public Account(int application_id, String account_number, String account_type, double balance) {
         this.application_id = application_id;
         this.account_number = account_number;
         this.account_type = account_type;
         this.balance = balance;
     }
 
-    public AccountDTO(String account_number, String account_type, double balance) {
+    public Account(String account_number, String account_type, double balance) {
         this.account_number = account_number;
         this.account_type = account_type;
         this.balance = balance;

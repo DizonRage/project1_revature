@@ -1,6 +1,6 @@
-package org.example.repository.dto;
+package org.example.model;
 
-public class UserDTO {
+public class User {
     private int user_id;
     private String username;
     private String pass;
@@ -9,10 +9,10 @@ public class UserDTO {
     private String email;
     private String role;
 
-    public UserDTO() {
+    public User() {
     }
 
-    public UserDTO(int user_id, String username, String pass, String first_name, String last_name, String email, String role) {
+    public User(int user_id, String username, String pass, String first_name, String last_name, String email, String role) {
         this.user_id = user_id;
         this.username = username;
         this.pass = pass;
@@ -22,7 +22,7 @@ public class UserDTO {
         this.role = role;
     }
 
-    public UserDTO(String username, String pass, String first_name, String last_name, String email, String role) {
+    public User(String username, String pass, String first_name, String last_name, String email, String role) {
         this.username = username;
         this.pass = pass;
         this.first_name = first_name;

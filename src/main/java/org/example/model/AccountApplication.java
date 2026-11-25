@@ -1,6 +1,6 @@
-package org.example.repository.dto;
+package org.example.model;
 
-public class AccountApplicationDTO {
+public class AccountApplication {
 
     private int application_id;
     private int applicant_id;
@@ -8,10 +8,10 @@ public class AccountApplicationDTO {
     private String account_type;
     private String status;
 
-    public AccountApplicationDTO() {
+    public AccountApplication() {
     }
 
-    public AccountApplicationDTO(int application_id, int applicant_id, int approver_id, String account_type, String status) {
+    public AccountApplication(int application_id, int applicant_id, int approver_id, String account_type, String status) {
         this.application_id = application_id;
         this.applicant_id = applicant_id;
         this.approver_id = approver_id;
@@ -19,12 +19,12 @@ public class AccountApplicationDTO {
         this.status = status;
     }
 
-    public AccountApplicationDTO(int applicant_id, String account_type) {
+    public AccountApplication(int applicant_id, String account_type) {
         this.applicant_id = applicant_id;
         this.account_type = account_type;
     }
 
-    public AccountApplicationDTO(int applicant_id, int approver_id, String account_type, String status) {
+    public AccountApplication(int applicant_id, int approver_id, String account_type, String status) {
         this.applicant_id = applicant_id;
         this.approver_id = approver_id;
         this.account_type = account_type;

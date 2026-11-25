@@ -1,14 +1,14 @@
-package org.example.repository.dto;
+package org.example.model;
 
-public class AccountOwnerDTO {
+public class AccountOwner {
 
     private int account_id;
     private int user_id;
 
-    public AccountOwnerDTO() {
+    public AccountOwner() {
     }
 
-    public AccountOwnerDTO(int account_id, int user_id) {
+    public AccountOwner(int account_id, int user_id) {
         this.account_id = account_id;
         this.user_id = user_id;
     }
