@@ -20,7 +20,7 @@ public class AccountDAO {
             ps.setInt(1, applicationId);
             ps.setString(2, account.getAccountNumber());
             ps.setString(3, account.getAccountType());
-            ps.setDouble(4, account.getBalance());
+            ps.setBigDecimal(4, account.getBalance());
             try(ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
                     int accountId = rs.getInt("account_id");
@@ -38,7 +38,7 @@ public class AccountDAO {
             ps.setInt(1, accountId);
             try (ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
-                    return new Account(rs.getInt("account_id"), rs.getInt("application_id"), rs.getString("account_number"), rs.getString("account_type"), rs.getDouble("balance"));
+                    return new Account(rs.getInt("account_id"), rs.getInt("application_id"), rs.getString("account_number"), rs.getString("account_type"), rs.getBigDecimal("balance"));
                 }
                 return null;
             }
@@ -53,7 +53,7 @@ public class AccountDAO {
             ps.setString(1, accountNumber);
             try (ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
-                    return new Account(rs.getInt("account_id"), rs.getInt("application_id"), rs.getString("account_number"), rs.getString("account_type"), rs.getDouble("balance"));
+                    return new Account(rs.getInt("account_id"), rs.getInt("application_id"), rs.getString("account_number"), rs.getString("account_type"), rs.getBigDecimal("balance"));
                 }
                 return null;
             }
@@ -68,7 +68,7 @@ public class AccountDAO {
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                list.add(new Account(rs.getInt("account_id"), rs.getString("account_number"), rs.getString("account_type"), rs.getDouble("balance")));
+                list.add(new Account(rs.getInt("account_id"), rs.getString("account_number"), rs.getString("account_type"), rs.getBigDecimal("balance")));
             }
         }
         return list;
@@ -81,7 +81,7 @@ public class AccountDAO {
             ps.setInt(1, account.getApplicationId());
             ps.setString(2, account.getAccountNumber());
             ps.setString(3, account.getAccountType());
-            ps.setDouble(4, account.getBalance());
+            ps.setBigDecimal(4, account.getBalance());
             ps.setInt(5, id);
             return ps.executeUpdate() > 0;
         }

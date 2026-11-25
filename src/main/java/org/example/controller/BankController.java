@@ -9,6 +9,7 @@ import org.example.service.AccountService;
 import org.example.service.TransactionService;
 import org.example.service.UserService;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -43,7 +44,7 @@ public class BankController {
         System.out.printf("Enter Account Number:");
         String accountNumber = scanner.nextLine().trim();
         System.out.printf("Enter Balance: ");
-        Double balance = scanner.nextDouble();
+        BigDecimal balance = scanner.nextBigDecimal();
 
         try{
             AccountApplication application = accountApplicationService.findApplicationById(applicationId);
@@ -110,7 +111,7 @@ public class BankController {
         System.out.printf("Enter Account Type (Acceptable are SAVINGS or CHECKING): ");
         String accountType = scanner.nextLine().trim();
         System.out.printf("Enter Balance: ");
-        Double balance = scanner.nextDouble();
+        BigDecimal balance = scanner.nextBigDecimal();
         System.out.printf("Enter to-be-updated account's ID: ");
         int id = scanner.nextInt();
 
@@ -295,10 +296,10 @@ public class BankController {
             otherAccountNumber = scanner.nextLine().trim();
         }
         System.out.printf("Enter Amount (Non-negative): ");
-        double amount;
+        BigDecimal amount;
         while (true) {
-            amount = scanner.nextDouble();
-            if(amount >= 0){
+            amount = scanner.nextBigDecimal();
+            if(amount.signum() >= 0){
                 break;
             }
             System.out.printf("Enter Valid Amount: ");
@@ -310,13 +311,13 @@ public class BankController {
 
             if(type == 1){
                 transaction.setTransactionType("DEPOSIT");
-                account.setBalance(account.getBalance() + amount);
+                account.setBalance(account.getBalance().add(amount));
             }else if (type == 2){
                 transaction.setTransactionType("WITHDRAWAL");
-                if(account.getBalance() - amount < 0){
-                    account.setBalance(0);
+                if(account.getBalance().compareTo(amount) < 0){
+                    account.setBalance(BigDecimal.ZERO);
                 }else{
-                    account.setBalance(account.getBalance() - amount);
+                    account.setBalance(account.getBalance().subtract(amount));
                 }
             }else{
                 Account otherAccount = accountService.getAccountByNumber(otherAccountNumber);
@@ -324,14 +325,14 @@ public class BankController {
                     System.out.println("Transferring account not found.");
                     return;
                 }
-                if(amount > otherAccount.getBalance()){
+                if(amount.compareTo(otherAccount.getBalance()) > 0){
                     System.out.println("Requested amount cannot be taken from other account.");
                     return;
                 }
                 Transaction otherTransaction = new Transaction(accountService.getAccountByNumber(otherAccountNumber).getAccountId(), "TRANSFER_OUT", amount);
-                otherAccount.setBalance(otherAccount.getBalance() - amount);
+                otherAccount.setBalance(otherAccount.getBalance().subtract(amount));
                 accountService.updateAccount(otherAccount, otherAccount.getAccountId());
-                account.setBalance(account.getBalance() + amount);
+                account.setBalance(account.getBalance().add(amount));
                 transaction.setTransactionType("TRANSFER_IN");
                 transactionService.addTransaction(otherTransaction);
             }

@@ -1,16 +1,18 @@
 package org.example.model;
 
+import java.math.BigDecimal;
+
 public class Account {
     private int accountId;
     private int applicationId;
     private String accountNumber;
     private String accountType;
-    private double balance;
+    private BigDecimal balance;
 
     public Account() {
     }
 
-    public Account(int accountId, int applicationId, String accountNumber, String accountType, double balance) {
+    public Account(int accountId, int applicationId, String accountNumber, String accountType, BigDecimal balance) {
         this.accountId = accountId;
         this.applicationId = applicationId;
         this.accountNumber = accountNumber;
@@ -18,14 +20,14 @@ public class Account {
         this.balance = balance;
     }
 
-    public Account(int applicationId, String accountNumber, String accountType, double balance) {
+    public Account(int applicationId, String accountNumber, String accountType, BigDecimal balance) {
         this.applicationId = applicationId;
         this.accountNumber = accountNumber;
         this.accountType = accountType;
         this.balance = balance;
     }
 
-    public Account(String accountNumber, String accountType, double balance) {
+    public Account(String accountNumber, String accountType, BigDecimal balance) {
         this.accountNumber = accountNumber;
         this.accountType = accountType;
         this.balance = balance;
@@ -47,11 +49,11 @@ public class Account {
         this.applicationId = applicationId;
     }
 
-    public double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

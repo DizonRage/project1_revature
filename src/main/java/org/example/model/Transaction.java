@@ -1,38 +1,40 @@
 package org.example.model;
 
+import java.math.BigDecimal;
+
 public class Transaction {
 
     private int transactionId;
     private int accountId;
     private String transactionType;
-    private double amount;
+    private BigDecimal amount;
 
     public Transaction() {
     }
 
-    public Transaction(int transactionId, int accountId, String transactionType, double amount) {
+    public Transaction(int transactionId, int accountId, String transactionType, BigDecimal amount) {
         this.transactionId = transactionId;
         this.accountId = accountId;
         this.transactionType = transactionType;
         this.amount = amount;
     }
 
-    public Transaction(int accountId, double amount) {
+    public Transaction(int accountId, BigDecimal amount) {
         this.accountId = accountId;
         this.amount = amount;
     }
 
-    public Transaction(int accountId, String transactionType, double amount) {
+    public Transaction(int accountId, String transactionType, BigDecimal amount) {
         this.accountId = accountId;
         this.transactionType = transactionType;
         this.amount = amount;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

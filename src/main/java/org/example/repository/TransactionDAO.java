@@ -19,7 +19,7 @@ public class TransactionDAO {
             PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setInt(1, transaction.getAccountId());
             ps.setString(2, transaction.getTransactionType());
-            ps.setDouble(3, transaction.getAmount());
+            ps.setBigDecimal(3, transaction.getAmount());
             try(ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
                     int accountId = rs.getInt("account_id");
@@ -37,7 +37,7 @@ public class TransactionDAO {
             ps.setInt(1, transactionId);
             try (ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
-                    return new Transaction(rs.getInt("transaction_id"), rs.getInt("account_id"), rs.getString("transaction_type"), rs.getDouble("amount"));
+                    return new Transaction(rs.getInt("transaction_id"), rs.getInt("account_id"), rs.getString("transaction_type"), rs.getBigDecimal("amount"));
                 }
                 return null;
             }
@@ -51,7 +51,7 @@ public class TransactionDAO {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, transaction.getAccountId());
             ps.setString(2, transaction.getTransactionType());
-            ps.setDouble(3, transaction.getAmount());
+            ps.setBigDecimal(3, transaction.getAmount());
             ps.setInt(4, id);
             return ps.executeUpdate() > 0;
         }
