@@ -37,3 +37,14 @@ build/
 
 ### Mac OS ###
 .DS_Store
+### IDE settings ###
+.idea/
+
+### Local environment / credentials ###
+.env
+.env.*
+*.env
+db.properties
+application-local.properties
+application-local.yml
+application-local.yaml
