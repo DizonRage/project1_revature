@@ -2,6 +2,7 @@ import org.example.controller.AccountController;
 import org.example.controller.TransferController;
 import org.example.exception.GlobalExceptionHandler;
 import org.example.service.AccountService;
+import org.example.service.TransactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,12 +25,15 @@ public class RequestErrorHandlingTest {
     @Mock
     AccountService accountService;
 
+    @Mock
+    TransactionService transactionService;
+
     MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders
-                .standaloneSetup(new AccountController(accountService), new TransferController(accountService))
+                .standaloneSetup(new AccountController(accountService, transactionService), new TransferController(accountService))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
     }

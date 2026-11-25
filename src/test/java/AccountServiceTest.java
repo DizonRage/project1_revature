@@ -29,6 +29,9 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class AccountServiceTest {
 
+    private static final Integer USER_ID = 7;
+    private static final String ROLE = "CUSTOMER";
+
     @Mock
     AccountRepository accountRepository;
 
@@ -42,7 +45,7 @@ public class AccountServiceTest {
         Account account = stored(1, "100.00", "OPEN");
         when(accountRepository.save(account)).thenReturn(account);
 
-        Account result = accountService.deposit(1, money("25.50"));
+        Account result = accountService.deposit(1, money("25.50"), USER_ID, ROLE);
 
         assertSame(account, result);
         assertMoney("125.50", result.getBalance());
@@ -55,7 +58,7 @@ public class AccountServiceTest {
     void depositRejectsInvalidAmount(String amount) {
         BigDecimal value = amount == null ? null : money(amount);
 
-        assertThrows(InvalidAmountException.class, () -> accountService.deposit(1, value));
+        assertThrows(InvalidAmountException.class, () -> accountService.deposit(1, value, USER_ID, ROLE));
 
         verifyNothingSaved();
     }
@@ -64,7 +67,7 @@ public class AccountServiceTest {
     void depositRejectsMissingAccount() {
         missing(1);
 
-        assertThrows(AccountNotFoundException.class, () -> accountService.deposit(1, money("10")));
+        assertThrows(AccountNotFoundException.class, () -> accountService.deposit(1, money("10"), USER_ID, ROLE));
 
         verifyNothingSaved();
     }
@@ -73,7 +76,7 @@ public class AccountServiceTest {
     void depositRejectsCancelledAccount() {
         Account account = stored(1, "100.00", "CANCELLED");
 
-        assertThrows(AccountClosedException.class, () -> accountService.deposit(1, money("10")));
+        assertThrows(AccountClosedException.class, () -> accountService.deposit(1, money("10"), USER_ID, ROLE));
 
         assertMoney("100.00", account.getBalance());
         verifyNothingSaved();
@@ -86,7 +89,7 @@ public class AccountServiceTest {
         Account account = stored(1, "100.00", "OPEN");
         when(accountRepository.save(account)).thenReturn(account);
 
-        Account result = accountService.withdraw(1, money("40.25"));
+        Account result = accountService.withdraw(1, money("40.25"), USER_ID, ROLE);
 
         assertSame(account, result);
         assertMoney("59.75", result.getBalance());
@@ -98,7 +101,7 @@ public class AccountServiceTest {
         Account account = stored(1, "100.00", "OPEN");
         when(accountRepository.save(account)).thenReturn(account);
 
-        assertMoney("0", accountService.withdraw(1, money("100")).getBalance());
+        assertMoney("0", accountService.withdraw(1, money("100"), USER_ID, ROLE).getBalance());
     }
 
     @ParameterizedTest
@@ -107,7 +110,7 @@ public class AccountServiceTest {
     void withdrawRejectsInvalidAmount(String amount) {
         BigDecimal value = amount == null ? null : money(amount);
 
-        assertThrows(InvalidAmountException.class, () -> accountService.withdraw(1, value));
+        assertThrows(InvalidAmountException.class, () -> accountService.withdraw(1, value, USER_ID, ROLE));
 
         verifyNothingSaved();
     }
@@ -116,7 +119,7 @@ public class AccountServiceTest {
     void withdrawRejectsMissingAccount() {
         missing(1);
 
-        assertThrows(AccountNotFoundException.class, () -> accountService.withdraw(1, money("10")));
+        assertThrows(AccountNotFoundException.class, () -> accountService.withdraw(1, money("10"), USER_ID, ROLE));
 
         verifyNothingSaved();
     }
@@ -125,7 +128,7 @@ public class AccountServiceTest {
     void withdrawRejectsCancelledAccount() {
         stored(1, "100.00", "CANCELLED");
 
-        assertThrows(AccountClosedException.class, () -> accountService.withdraw(1, money("10")));
+        assertThrows(AccountClosedException.class, () -> accountService.withdraw(1, money("10"), USER_ID, ROLE));
 
         verifyNothingSaved();
     }
@@ -134,7 +137,7 @@ public class AccountServiceTest {
     void withdrawRejectsInsufficientFunds() {
         Account account = stored(1, "100.00", "OPEN");
 
-        assertThrows(InsufficientFundsException.class, () -> accountService.withdraw(1, money("100.01")));
+        assertThrows(InsufficientFundsException.class, () -> accountService.withdraw(1, money("100.01"), USER_ID, ROLE));
 
         assertMoney("100.00", account.getBalance());
         verifyNothingSaved();
@@ -149,7 +152,7 @@ public class AccountServiceTest {
         when(accountRepository.save(from)).thenReturn(from);
         when(accountRepository.save(to)).thenReturn(to);
 
-        Account result = accountService.transfer(1, 2, money("30.00"));
+        Account result = accountService.transfer(1, 2, money("30.00"), USER_ID, ROLE);
 
         assertSame(from, result);
         assertMoney("70.00", from.getBalance());
@@ -165,7 +168,7 @@ public class AccountServiceTest {
         Integer toId = Integer.parseInt("1000");
 
         assertThrows(InvalidTransferException.class,
-                () -> accountService.transfer(fromId, toId, money("10")));
+                () -> accountService.transfer(fromId, toId, money("10"), USER_ID, ROLE));
 
         verifyNothingSaved();
     }
@@ -176,7 +179,7 @@ public class AccountServiceTest {
     void transferRejectsInvalidAmount(String amount) {
         BigDecimal value = amount == null ? null : money(amount);
 
-        assertThrows(InvalidAmountException.class, () -> accountService.transfer(1, 2, value));
+        assertThrows(InvalidAmountException.class, () -> accountService.transfer(1, 2, value, USER_ID, ROLE));
 
         verifyNothingSaved();
     }
@@ -186,7 +189,7 @@ public class AccountServiceTest {
         missing(1);
 
         assertThrows(AccountNotFoundException.class,
-                () -> accountService.transfer(1, 2, money("10")));
+                () -> accountService.transfer(1, 2, money("10"), USER_ID, ROLE));
 
         verifyNothingSaved();
     }
@@ -197,7 +200,7 @@ public class AccountServiceTest {
         missing(2);
 
         assertThrows(AccountNotFoundException.class,
-                () -> accountService.transfer(1, 2, money("10")));
+                () -> accountService.transfer(1, 2, money("10"), USER_ID, ROLE));
 
         verifyNothingSaved();
     }
@@ -208,7 +211,7 @@ public class AccountServiceTest {
         stored(2, "50.00", "OPEN");
 
         assertThrows(AccountClosedException.class,
-                () -> accountService.transfer(1, 2, money("10")));
+                () -> accountService.transfer(1, 2, money("10"), USER_ID, ROLE));
 
         verifyNothingSaved();
     }
@@ -219,7 +222,7 @@ public class AccountServiceTest {
         stored(2, "50.00", "CANCELLED");
 
         assertThrows(AccountClosedException.class,
-                () -> accountService.transfer(1, 2, money("10")));
+                () -> accountService.transfer(1, 2, money("10"), USER_ID, ROLE));
 
         verifyNothingSaved();
     }
@@ -230,7 +233,7 @@ public class AccountServiceTest {
         Account to = stored(2, "50.00", "OPEN");
 
         assertThrows(InsufficientFundsException.class,
-                () -> accountService.transfer(1, 2, money("100.01")));
+                () -> accountService.transfer(1, 2, money("100.01"), USER_ID, ROLE));
 
         assertMoney("100.00", from.getBalance());
         assertMoney("50.00", to.getBalance());

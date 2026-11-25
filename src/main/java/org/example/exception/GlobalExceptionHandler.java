@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(AccountNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(AccountNotFoundException e) {
+    @ExceptionHandler({
+            AccountNotFoundException.class,
+            UserNotFoundException.class,
+            ApplicationNotFoundException.class
+    })
+    public ResponseEntity<ErrorResponse> handleNotFound(BankException e) {
         return build(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
@@ -21,10 +25,26 @@ public class GlobalExceptionHandler {
             InvalidAmountException.class,
             AccountClosedException.class,
             InsufficientFundsException.class,
-            InvalidTransferException.class
+            InvalidTransferException.class,
+            InvalidApplicationStateException.class
     })
     public ResponseEntity<ErrorResponse> handleBadRequest(BankException e) {
         return build(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler({UnauthorizedException.class, InvalidCredentialsException.class})
+    public ResponseEntity<ErrorResponse> handleUnauthorized(BankException e) {
+        return build(HttpStatus.UNAUTHORIZED, e.getMessage());
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ErrorResponse> handleForbidden(ForbiddenException e) {
+        return build(HttpStatus.FORBIDDEN, e.getMessage());
+    }
+
+    @ExceptionHandler({UsernameTakenException.class, AlreadyOwnerException.class})
+    public ResponseEntity<ErrorResponse> handleConflict(BankException e) {
+        return build(HttpStatus.CONFLICT, e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

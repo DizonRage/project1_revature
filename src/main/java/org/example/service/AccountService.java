@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.entity.Account;
+import org.example.entity.AccountOwner;
 import org.example.exception.AccountClosedException;
 import org.example.exception.AccountNotFoundException;
 import org.example.exception.InsufficientFundsException;
@@ -23,7 +24,8 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public Account deposit(Integer accountId, BigDecimal amount) {
+    public Account deposit(Integer accountId, BigDecimal amount, Integer userId, String role) {
+        // TODO: ownership check (owner in account_owners OR role ADMIN), throw ForbiddenException
         requirePositive(amount);
         Account account = findAccount(accountId);
         requireNotCancelled(account);
@@ -31,7 +33,8 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
-    public Account withdraw(Integer accountId, BigDecimal amount) {
+    public Account withdraw(Integer accountId, BigDecimal amount, Integer userId, String role) {
+        // TODO: ownership check (owner in account_owners OR role ADMIN), throw ForbiddenException
         requirePositive(amount);
         Account account = findAccount(accountId);
         requireNotCancelled(account);
@@ -41,7 +44,8 @@ public class AccountService {
     }
 
     @Transactional
-    public Account transfer(Integer fromId, Integer toId, BigDecimal amount) {
+    public Account transfer(Integer fromId, Integer toId, BigDecimal amount, Integer userId, String role) {
+        // TODO: ownership check (owner in account_owners OR role ADMIN), throw ForbiddenException
         if (fromId.equals(toId)) {
             throw new InvalidTransferException("Cannot transfer to the same account");
         }
@@ -56,6 +60,31 @@ public class AccountService {
         Account savedFrom = accountRepository.save(from);
         accountRepository.save(to);
         return savedFrom;
+    }
+
+    // Return the account to an owner (account_owners) or ADMIN; AccountNotFoundException, ForbiddenException. @Transactional: no.
+    public Account getAccount(Integer accountId, Integer userId, String role) {
+        throw new UnsupportedOperationException("TODO: implement");
+    }
+
+    // Owner or ADMIN adds the named user to an open account; AccountNotFoundException, ForbiddenException, AccountClosedException, UserNotFoundException, AlreadyOwnerException. @Transactional: yes.
+    public AccountOwner addOwner(Integer accountId, String username, Integer userId, String role) {
+        throw new UnsupportedOperationException("TODO: implement");
+    }
+
+    // Return every account userId owns via account_owners, including cancelled ones; no exceptions. @Transactional: no.
+    public List<Account> getAccountsForUser(Integer userId) {
+        throw new UnsupportedOperationException("TODO: implement");
+    }
+
+    // Admin listing: all accounts when status is null or blank, otherwise only that status; no exceptions. @Transactional: no.
+    public List<Account> getAccounts(String status) {
+        throw new UnsupportedOperationException("TODO: implement");
+    }
+
+    // Soft delete: set status to CANCELLED and never delete the row; AccountNotFoundException, AccountClosedException if already cancelled. @Transactional: yes.
+    public Account updateAccountStatus(Integer accountId, String status) {
+        throw new UnsupportedOperationException("TODO: implement");
     }
 
     public int addAccount(Account account, int applicationId) {
