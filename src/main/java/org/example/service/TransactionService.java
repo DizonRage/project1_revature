@@ -1,9 +1,7 @@
 package org.example.service;
 
 import org.example.repository.TransactionDAO;
-import org.example.repository.UserDAO;
-import org.example.repository.dto.TransactionDTO;
-import org.example.repository.dto.UserDTO;
+import org.example.entity.Transaction;
 
 import java.sql.SQLException;
 
@@ -15,11 +13,11 @@ public class TransactionService {
         transactionDAO = new TransactionDAO();
     }
 
-    public int addTransaction(TransactionDTO transaction) throws SQLException {
+    public int addTransaction(Transaction transaction) throws SQLException {
         return transactionDAO.create(transaction);
     }
 
-    public TransactionDTO findTransaction(int id) throws SQLException {
+    public Transaction findTransaction(int id) throws SQLException {
         return transactionDAO.findById(id);
     }
 }

@@ -1,8 +1,6 @@
 package org.example.repository;
 
-import org.example.repository.dto.AccountDTO;
-import org.example.repository.dto.TransactionDTO;
-import org.example.repository.dto.UserDTO;
+import org.example.entity.Transaction;
 import org.example.util.DatabaseConnectionFactory;
 
 import java.sql.Connection;
@@ -12,32 +10,32 @@ import java.sql.SQLException;
 
 public class TransactionDAO {
 
-    public int create(TransactionDTO transaction) throws SQLException {
+    public int create(Transaction transaction) throws SQLException {
         String sql = "INSERT INTO transactions (account_id, transaction_type, amount) VALUES (?, ?, ?) RETURNING account_id;";
 
         try(Connection conn = DatabaseConnectionFactory.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
-            ps.setInt(1, transaction.getAccount_id());
-            ps.setString(2, transaction.getTransaction_type());
+            ps.setInt(1, transaction.getAccountId());
+            ps.setString(2, transaction.getTransactionType());
             ps.setDouble(3, transaction.getAmount());
             try(ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
                     int account_id = rs.getInt("account_id");
-                    transaction.setAccount_id(account_id);
+                    transaction.setAccountId(account_id);
                     return account_id;
                 }
             }throw new SQLException("Creating user failed, no ID obtained");
         }
     }
 
-    public TransactionDTO findById(int transaction_id) throws SQLException{
+    public Transaction findById(int transactionId) throws SQLException{
         String sql = "SELECT * FROM transactions WHERE transaction_id = ?;";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)){
-            ps.setInt(1, transaction_id);
+            ps.setInt(1, transactionId);
             try (ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
-                    return new TransactionDTO(rs.getInt("transaction_id"), rs.getInt("account_id"), rs.getString("transaction_type"), rs.getDouble("amount"));
+                    return new Transaction(rs.getInt("transaction_id"), rs.getInt("account_id"), rs.getString("transaction_type"), rs.getDouble("amount"));
                 }
                 return null;
             }
@@ -45,12 +43,12 @@ public class TransactionDAO {
         }
     }
 
-    public boolean update(TransactionDTO transaction, int id) throws SQLException {
+    public boolean update(Transaction transaction, int id) throws SQLException {
         String sql = "UPDATE transactions SET account_id = ?, transaction_type = ?, amount = ? WHERE transaction_id = ?";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, transaction.getAccount_id());
-            ps.setString(2, transaction.getTransaction_type());
+            ps.setInt(1, transaction.getAccountId());
+            ps.setString(2, transaction.getTransactionType());
             ps.setDouble(3, transaction.getAmount());
             ps.setInt(4, id);
             return ps.executeUpdate() > 0;

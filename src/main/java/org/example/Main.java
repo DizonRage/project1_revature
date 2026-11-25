@@ -2,13 +2,7 @@ package org.example;
 
 //import org.example.controller.BankController;
 import org.example.controller.BankController;
-import org.example.repository.AccountDAO;
-import org.example.repository.dto.AccountDTO;
-import org.example.util.DatabaseConnectionFactory;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
 import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or

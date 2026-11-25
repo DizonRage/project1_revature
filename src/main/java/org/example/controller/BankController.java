@@ -1,9 +1,9 @@
 package org.example.controller;
 
-import org.example.repository.dto.AccountApplicationDTO;
-import org.example.repository.dto.AccountDTO;
-import org.example.repository.dto.TransactionDTO;
-import org.example.repository.dto.UserDTO;
+import org.example.entity.AccountApplication;
+import org.example.entity.Account;
+import org.example.entity.Transaction;
+import org.example.entity.User;
 import org.example.service.AccountApplicationService;
 import org.example.service.AccountService;
 import org.example.service.TransactionService;
@@ -46,12 +46,12 @@ public class BankController {
         Double balance = scanner.nextDouble();
 
         try{
-            AccountApplicationDTO application = accountApplicationService.findApplicationById(application_id);
+            AccountApplication application = accountApplicationService.findApplicationById(application_id);
             if(application == null || application.getStatus().equals("PENDING") || application.getStatus().equals("DENIED")){
                 System.out.println("Account Application not approved");
                 return;
             }
-            AccountDTO accountDTO = accountService.getAccountById(accountService.addAccount(new AccountDTO(account_number, application.getAccount_type(), balance), application_id));
+            Account accountDTO = accountService.getAccountById(accountService.addAccount(new Account(account_number, application.getAccountType(), balance), application_id));
             System.out.println("Account created");
             System.out.println(accountDTO.toString());
         }catch(SQLException e){
@@ -64,7 +64,7 @@ public class BankController {
         int ID = scanner.nextInt();
 
         try{
-            AccountDTO accountDTO = accountService.getAccountById(ID);
+            Account accountDTO = accountService.getAccountById(ID);
             if(accountDTO != null){
                 System.out.println("Account found");
                 System.out.printf(accountDTO.toString());
@@ -90,7 +90,7 @@ public class BankController {
         System.out.printf("Enter Account Number: ");
         String number = scanner.nextLine().trim();
         try{
-            AccountDTO accountDTO = accountService.getAccountByNumber(number);
+            Account accountDTO = accountService.getAccountByNumber(number);
             if(accountDTO != null){
                 System.out.println("Account found");
                 System.out.printf(accountDTO.toString());
@@ -115,7 +115,7 @@ public class BankController {
         int id = scanner.nextInt();
 
         try{
-            AccountDTO accountDTO = new AccountDTO(id, accountService.getAccountById(id).getApplication_id(), account_number, account_type, balance);
+            Account accountDTO = new Account(id, accountService.getAccountById(id).getApplicationId(), account_number, account_type, balance);
             boolean update = accountService.updateAccount(accountDTO, id);
             if(update){
                 System.out.println("Account updated");
@@ -160,9 +160,9 @@ public class BankController {
         String role = scanner.nextLine().trim();
 
         try{
-            UserDTO userDTO = userService.getUserById(userService.addUser(new UserDTO(username, password, first_name, last_name, email, role)));
+            User user = userService.getUserById(userService.addUser(new User(username, password, first_name, last_name, email, role)));
             System.out.println("User created");
-            System.out.println(userDTO.toString());
+            System.out.println(user.toString());
         }catch(SQLException e){
             System.out.printf(e.getMessage());
         }
@@ -182,9 +182,9 @@ public class BankController {
         String email = scanner.nextLine().trim();
 
         try{
-            UserDTO userDTO = userService.getUserById(userService.addUser(new UserDTO(username, password, first_name, last_name, email, "CUSTOMER")));
+            User user = userService.getUserById(userService.addUser(new User(username, password, first_name, last_name, email, "CUSTOMER")));
             System.out.println("User created");
-            System.out.println(userDTO.toStringCustomer());
+            System.out.println(user.toStringCustomer());
         }catch(SQLException e){
             System.out.printf(e.getMessage());
         }
@@ -196,9 +196,9 @@ public class BankController {
         int id = scanner.nextInt();
 
         try{
-            UserDTO userDTO = userService.getUserById(id);
+            User user = userService.getUserById(id);
             System.out.println("User found");
-            System.out.println(userDTO.toString());
+            System.out.println(user.toString());
         }catch(SQLException e){
             System.out.printf(e.getMessage());
         }
@@ -212,7 +212,7 @@ public class BankController {
         String pass = scanner.nextLine().trim();
 
         try{
-            UserDTO userDTO = userService.login(user, pass);
+            User userDTO = userService.login(user, pass);
             status = userDTO.getRole();
             login = userDTO.getId();
             System.out.println("User login successful");
@@ -245,7 +245,7 @@ public class BankController {
                 System.out.println("User does not exist");
                 return;
             }
-            UserDTO userDTO = new UserDTO(user, pass, first_name, last_name, email, role);
+            User userDTO = new User(user, pass, first_name, last_name, email, role);
             boolean update = userService.updateUser(userDTO, id);
             if(update){
                 System.out.println("User updated");
@@ -305,21 +305,21 @@ public class BankController {
         }
 
         try{
-            AccountDTO accountDTO = accountService.getAccountByNumber(account_number);
-            TransactionDTO transactionDTO = new TransactionDTO(accountService.getAccountByNumber(account_number).getAccount_id(), amount);
+            Account accountDTO = accountService.getAccountByNumber(account_number);
+            Transaction transaction = new Transaction(accountService.getAccountByNumber(account_number).getAccountId(), amount);
 
             if(type == 1){
-                transactionDTO.setTransaction_type("DEPOSIT");
+                transaction.setTransactionType("DEPOSIT");
                 accountDTO.setBalance(accountDTO.getBalance() + amount);
             }else if (type == 2){
-                transactionDTO.setTransaction_type("WITHDRAWAL");
+                transaction.setTransactionType("WITHDRAWAL");
                 if(accountDTO.getBalance() - amount < 0){
                     accountDTO.setBalance(0);
                 }else{
                     accountDTO.setBalance(accountDTO.getBalance() - amount);
                 }
             }else{
-                AccountDTO otherAccountDTO = accountService.getAccountByNumber(other_account_number);
+                Account otherAccountDTO = accountService.getAccountByNumber(other_account_number);
                 if (otherAccountDTO == null) {
                     System.out.println("Transferring account not found.");
                     return;
@@ -328,15 +328,15 @@ public class BankController {
                     System.out.println("Requested amount cannot be taken from other account.");
                     return;
                 }
-                TransactionDTO otherTransactionDTO = new TransactionDTO(accountService.getAccountByNumber(other_account_number).getAccount_id(), "TRANSFER_OUT", amount);
+                Transaction otherTransaction = new Transaction(accountService.getAccountByNumber(other_account_number).getAccountId(), "TRANSFER_OUT", amount);
                 otherAccountDTO.setBalance(otherAccountDTO.getBalance() - amount);
-                accountService.updateAccount(otherAccountDTO, otherAccountDTO.getAccount_id());
+                accountService.updateAccount(otherAccountDTO, otherAccountDTO.getAccountId());
                 accountDTO.setBalance(accountDTO.getBalance() + amount);
-                transactionDTO.setTransaction_type("TRANSFER_IN");
-                transactionService.addTransaction(otherTransactionDTO);
+                transaction.setTransactionType("TRANSFER_IN");
+                transactionService.addTransaction(otherTransaction);
             }
-            accountService.updateAccount(accountDTO, accountDTO.getAccount_id());
-            transactionService.addTransaction(transactionDTO);
+            accountService.updateAccount(accountDTO, accountDTO.getAccountId());
+            transactionService.addTransaction(transaction);
             System.out.println("Transaction completed.");
         }catch(SQLException e){
             System.out.printf(e.getMessage());
@@ -348,10 +348,10 @@ public class BankController {
         int id = scanner.nextInt();
 
         try{
-            TransactionDTO transactionDTO = transactionService.findTransaction(id);
-            if(transactionDTO != null) {
+            Transaction transaction = transactionService.findTransaction(id);
+            if(transaction != null) {
                 System.out.println("Account found");
-                System.out.println(transactionDTO.toString());
+                System.out.println(transaction.toString());
             }
         }catch(SQLException e){
             System.out.printf(e.getMessage());
@@ -389,7 +389,7 @@ public class BankController {
         int id = scanner.nextInt();
 
         try{
-            AccountApplicationDTO applicationDTO = accountApplicationService.findApplicationById(id);
+            AccountApplication applicationDTO = accountApplicationService.findApplicationById(id);
             if(applicationDTO != null) {
                 System.out.println("Account found");
                 System.out.printf(applicationDTO.toString());
@@ -414,7 +414,7 @@ public class BankController {
         }
 
         try{
-            AccountApplicationDTO accountApplicationDTO = accountApplicationService.findApplicationById(id);
+            AccountApplication accountApplicationDTO = accountApplicationService.findApplicationById(id);
             if(accountApplicationDTO != null) {
                 System.out.println("Account Application found");
                 System.out.printf(accountApplicationDTO.toString());

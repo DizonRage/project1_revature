@@ -1,32 +1,32 @@
-package org.example.repository.dto;
+package org.example.entity;
 
-public class UserDTO {
-    private int user_id;
+public class User {
+    private int userId;
     private String username;
     private String pass;
-    private String first_name;
-    private String last_name;
+    private String firstName;
+    private String lastName;
     private String email;
     private String role;
 
-    public UserDTO() {
+    public User() {
     }
 
-    public UserDTO(int user_id, String username, String pass, String first_name, String last_name, String email, String role) {
-        this.user_id = user_id;
+    public User(int userId, String username, String pass, String firstName, String lastName, String email, String role) {
+        this.userId = userId;
         this.username = username;
         this.pass = pass;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.role = role;
     }
 
-    public UserDTO(String username, String pass, String first_name, String last_name, String email, String role) {
+    public User(String username, String pass, String firstName, String lastName, String email, String role) {
         this.username = username;
         this.pass = pass;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.role = role;
     }
@@ -47,20 +47,20 @@ public class UserDTO {
         this.email = email;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getUsername() {
@@ -80,27 +80,27 @@ public class UserDTO {
     }
 
     public int getId() {
-        return user_id;
+        return userId;
     }
 
-    public void setId(int user_id) {
-        this.user_id = user_id;
+    public void setId(int userId ) {
+        this.userId = userId;
     }
 
     @Override
     public String toString() {
-        return  "User ID: " + user_id +
+        return  "User ID: " + userId +
                 "\nUsername: " + username +
                 "\nPassword: " + pass +
-                "\nFirst Name: " + first_name +
-                "\nLast Name: " + last_name +
+                "\nFirst Name: " + firstName +
+                "\nLast Name: " + lastName +
                 "\nEmail: " + email +
                 "\nRole:" + role + "\n";
     }
 
     public String toStringCustomer(){
-        return "First Name: " + first_name +
-                "\nLast Name: " + last_name +
+        return "First Name: " + firstName +
+                "\nLast Name: " + lastName +
                 "\nEmail: " + email + "\n";
     }
 }
