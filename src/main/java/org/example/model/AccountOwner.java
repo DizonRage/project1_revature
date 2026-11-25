@@ -2,30 +2,30 @@ package org.example.model;
 
 public class AccountOwner {
 
-    private int account_id;
-    private int user_id;
+    private int accountId;
+    private int userId;
 
     public AccountOwner() {
     }
 
-    public AccountOwner(int account_id, int user_id) {
-        this.account_id = account_id;
-        this.user_id = user_id;
+    public AccountOwner(int accountId, int userId) {
+        this.accountId = accountId;
+        this.userId = userId;
     }
 
-    public int getAccount_id() {
-        return account_id;
+    public int getAccountId() {
+        return accountId;
     }
 
-    public void setAccount_id(int account_id) {
-        this.account_id = account_id;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

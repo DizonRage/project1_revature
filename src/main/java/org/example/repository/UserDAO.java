@@ -19,25 +19,25 @@ public class UserDAO {
             PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPass());
-            ps.setString(3, user.getFirst_name());
-            ps.setString(4, user.getLast_name());
+            ps.setString(3, user.getFirstName());
+            ps.setString(4, user.getLastName());
             ps.setString(5, user.getEmail());
             ps.setString(6, user.getRole());
             try(ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
-                    int user_id = rs.getInt(1);
-                    user.setId(user_id);
-                    return user_id;
+                    int userId = rs.getInt(1);
+                    user.setUserId(userId);
+                    return userId;
                 }
             }throw new SQLException("Creating user failed, no ID obtained");
         }
     }
 
-    public User findById(int user_id) throws SQLException{
+    public User findById(int userId) throws SQLException{
         String sql = "SELECT * FROM users WHERE user_id = ?;";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql)){
-            ps.setInt(1, user_id);
+            ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
                     return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("pass"), rs.getString("first_name"), rs.getString("last_name"), rs.getString("email"), rs.getString("role"));
@@ -77,26 +77,26 @@ public class UserDAO {
         return list;
     }
 
-    public boolean update(User user, int user_id) throws SQLException {
+    public boolean update(User user, int userId) throws SQLException {
         String sql = "UPDATE users SET username = ?, pass = ?, first_name = ?, last_name = ?, email = ?, role = ? WHERE user_id = ?";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPass());
-            ps.setString(3, user.getFirst_name());
-            ps.setString(4, user.getLast_name());
+            ps.setString(3, user.getFirstName());
+            ps.setString(4, user.getLastName());
             ps.setString(5, user.getEmail());
             ps.setString(6, user.getRole());
-            ps.setInt(7, user_id);
+            ps.setInt(7, userId);
             return ps.executeUpdate() > 0;
         }
     }
 
-    public boolean delete(int user_id) throws SQLException {
+    public boolean delete(int userId) throws SQLException {
         String sql = "DELETE FROM users WHERE user_id = ?";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, user_id);
+            ps.setInt(1, userId);
             return ps.executeUpdate() > 0;
         }
     }

@@ -2,29 +2,29 @@ package org.example.model;
 
 public class Transaction {
 
-    private int transaction_id;
-    private int account_id;
-    private String transaction_type;
+    private int transactionId;
+    private int accountId;
+    private String transactionType;
     private double amount;
 
     public Transaction() {
     }
 
-    public Transaction(int transaction_id, int account_id, String transaction_type, double amount) {
-        this.transaction_id = transaction_id;
-        this.account_id = account_id;
-        this.transaction_type = transaction_type;
+    public Transaction(int transactionId, int accountId, String transactionType, double amount) {
+        this.transactionId = transactionId;
+        this.accountId = accountId;
+        this.transactionType = transactionType;
         this.amount = amount;
     }
 
-    public Transaction(int account_id, double amount) {
-        this.account_id = account_id;
+    public Transaction(int accountId, double amount) {
+        this.accountId = accountId;
         this.amount = amount;
     }
 
-    public Transaction(int account_id, String transaction_type, double amount) {
-        this.account_id = account_id;
-        this.transaction_type = transaction_type;
+    public Transaction(int accountId, String transactionType, double amount) {
+        this.accountId = accountId;
+        this.transactionType = transactionType;
         this.amount = amount;
     }
 
@@ -36,35 +36,35 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public String getTransaction_type() {
-        return transaction_type;
+    public String getTransactionType() {
+        return transactionType;
     }
 
-    public void setTransaction_type(String transaction_type) {
-        this.transaction_type = transaction_type;
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
     }
 
-    public int getAccount_id() {
-        return account_id;
+    public int getAccountId() {
+        return accountId;
     }
 
-    public void setAccount_id(int account_id) {
-        this.account_id = account_id;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
-    public int getTransaction_id() {
-        return transaction_id;
+    public int getTransactionId() {
+        return transactionId;
     }
 
-    public void setTransaction_id(int transaction_id) {
-        this.transaction_id = transaction_id;
+    public void setTransactionId(int transactionId) {
+        this.transactionId = transactionId;
     }
 
     @Override
     public String toString() {
-        return "Transaction ID: " + transaction_id +
-                "\nAccount ID: " + account_id +
-                "\nTransaction Type: " + transaction_type +
+        return "Transaction ID: " + transactionId +
+                "\nAccount ID: " + accountId +
+                "\nTransaction Type: " + transactionType +
                 "\nAmount: " + amount + "\n";
     }
 }

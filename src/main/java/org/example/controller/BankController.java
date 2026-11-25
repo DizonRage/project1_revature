@@ -38,20 +38,20 @@ public class BankController {
     public void handleCreateAccount() {
 
         System.out.printf("Enter Application ID:");
-        int application_id = scanner.nextInt();
+        int applicationId = scanner.nextInt();
         scanner.nextLine();
         System.out.printf("Enter Account Number:");
-        String account_number = scanner.nextLine().trim();
+        String accountNumber = scanner.nextLine().trim();
         System.out.printf("Enter Balance: ");
         Double balance = scanner.nextDouble();
 
         try{
-            AccountApplication application = accountApplicationService.findApplicationById(application_id);
+            AccountApplication application = accountApplicationService.findApplicationById(applicationId);
             if(application == null || application.getStatus().equals("PENDING") || application.getStatus().equals("DENIED")){
                 System.out.println("Account Application not approved");
                 return;
             }
-            Account account = accountService.getAccountById(accountService.addAccount(new Account(account_number, application.getAccount_type(), balance), application_id));
+            Account account = accountService.getAccountById(accountService.addAccount(new Account(accountNumber, application.getAccountType(), balance), applicationId));
             System.out.println("Account created");
             System.out.println(account.toString());
         }catch(SQLException e){
@@ -106,16 +106,16 @@ public class BankController {
     public void handleUpdateAccount(){
         System.out.println("Re-enter the new details for the account");
         System.out.printf("Enter Account Number:");
-        String account_number = scanner.nextLine().trim();
+        String accountNumber = scanner.nextLine().trim();
         System.out.printf("Enter Account Type (Acceptable are SAVINGS or CHECKING): ");
-        String account_type = scanner.nextLine().trim();
+        String accountType = scanner.nextLine().trim();
         System.out.printf("Enter Balance: ");
         Double balance = scanner.nextDouble();
         System.out.printf("Enter to-be-updated account's ID: ");
         int id = scanner.nextInt();
 
         try{
-            Account account = new Account(id, accountService.getAccountById(id).getApplication_id(), account_number, account_type, balance);
+            Account account = new Account(id, accountService.getAccountById(id).getApplicationId(), accountNumber, accountType, balance);
             boolean update = accountService.updateAccount(account, id);
             if(update){
                 System.out.println("Account updated");
@@ -151,16 +151,16 @@ public class BankController {
         System.out.printf("Enter Password: ");
         String password = scanner.nextLine().trim();
         System.out.printf("Enter First Name: ");
-        String first_name = scanner.nextLine().trim();
+        String firstName = scanner.nextLine().trim();
         System.out.printf("Enter Last Name: ");
-        String last_name = scanner.nextLine().trim();
+        String lastName = scanner.nextLine().trim();
         System.out.printf("Enter email: ");
         String email = scanner.nextLine().trim();
         System.out.printf("Enter role(Acceptable CUSTOMER or EMPLOYEE): ");
         String role = scanner.nextLine().trim();
 
         try{
-            User createdUser = userService.getUserById(userService.addUser(new User(username, password, first_name, last_name, email, role)));
+            User createdUser = userService.getUserById(userService.addUser(new User(username, password, firstName, lastName, email, role)));
             System.out.println("User created");
             System.out.println(createdUser.toString());
         }catch(SQLException e){
@@ -175,14 +175,14 @@ public class BankController {
         System.out.printf("Enter Password: ");
         String password = scanner.nextLine().trim();
         System.out.printf("Enter First Name: ");
-        String first_name = scanner.nextLine().trim();
+        String firstName = scanner.nextLine().trim();
         System.out.printf("Enter Last Name: ");
-        String last_name = scanner.nextLine().trim();
+        String lastName = scanner.nextLine().trim();
         System.out.printf("Enter email: ");
         String email = scanner.nextLine().trim();
 
         try{
-            User createdUser = userService.getUserById(userService.addUser(new User(username, password, first_name, last_name, email, "CUSTOMER")));
+            User createdUser = userService.getUserById(userService.addUser(new User(username, password, firstName, lastName, email, "CUSTOMER")));
             System.out.println("User created");
             System.out.println(createdUser.toStringCustomer());
         }catch(SQLException e){
@@ -214,7 +214,7 @@ public class BankController {
         try{
             User loggedInUser = userService.login(user, pass);
             status = loggedInUser.getRole();
-            login = loggedInUser.getId();
+            login = loggedInUser.getUserId();
             System.out.println("User login successful");
         }catch(SQLException e){
             System.out.printf(e.getMessage());
@@ -232,9 +232,9 @@ public class BankController {
         System.out.printf("Password: ");
         String pass = scanner.nextLine().trim();
         System.out.printf("Enter First Name: ");
-        String first_name = scanner.nextLine().trim();
+        String firstName = scanner.nextLine().trim();
         System.out.printf("Enter Last Name: ");
-        String last_name = scanner.nextLine().trim();
+        String lastName = scanner.nextLine().trim();
         System.out.printf("Enter Email: ");
         String email = scanner.nextLine().trim();
         System.out.printf("Enter Role: ");
@@ -245,7 +245,7 @@ public class BankController {
                 System.out.println("User does not exist");
                 return;
             }
-            User updatedUser = new User(user, pass, first_name, last_name, email, role);
+            User updatedUser = new User(user, pass, firstName, lastName, email, role);
             boolean update = userService.updateUser(updatedUser, id);
             if(update){
                 System.out.println("User updated");
@@ -277,7 +277,7 @@ public class BankController {
 
     public void handleCreateTransaction(){
         System.out.printf("Enter account number:");
-        String account_number = scanner.nextLine().trim();
+        String accountNumber = scanner.nextLine().trim();
         System.out.printf("Enter Transaction Type: \n1. DEPOSIT\n2. WITHDRAW\n3. TRANSFER\n4. CANCEL\n");
         int type;
         while(true){
@@ -288,11 +288,11 @@ public class BankController {
                 break;
             }
         }
-        String other_account_number = "";
+        String otherAccountNumber = "";
         if(type == 3){
             System.out.printf("Enter account transferred from: ");
             scanner.nextLine();
-            other_account_number = scanner.nextLine().trim();
+            otherAccountNumber = scanner.nextLine().trim();
         }
         System.out.printf("Enter Amount (Non-negative): ");
         double amount;
@@ -305,21 +305,21 @@ public class BankController {
         }
 
         try{
-            Account account = accountService.getAccountByNumber(account_number);
-            Transaction transaction = new Transaction(accountService.getAccountByNumber(account_number).getAccount_id(), amount);
+            Account account = accountService.getAccountByNumber(accountNumber);
+            Transaction transaction = new Transaction(accountService.getAccountByNumber(accountNumber).getAccountId(), amount);
 
             if(type == 1){
-                transaction.setTransaction_type("DEPOSIT");
+                transaction.setTransactionType("DEPOSIT");
                 account.setBalance(account.getBalance() + amount);
             }else if (type == 2){
-                transaction.setTransaction_type("WITHDRAWAL");
+                transaction.setTransactionType("WITHDRAWAL");
                 if(account.getBalance() - amount < 0){
                     account.setBalance(0);
                 }else{
                     account.setBalance(account.getBalance() - amount);
                 }
             }else{
-                Account otherAccount = accountService.getAccountByNumber(other_account_number);
+                Account otherAccount = accountService.getAccountByNumber(otherAccountNumber);
                 if (otherAccount == null) {
                     System.out.println("Transferring account not found.");
                     return;
@@ -328,14 +328,14 @@ public class BankController {
                     System.out.println("Requested amount cannot be taken from other account.");
                     return;
                 }
-                Transaction otherTransaction = new Transaction(accountService.getAccountByNumber(other_account_number).getAccount_id(), "TRANSFER_OUT", amount);
+                Transaction otherTransaction = new Transaction(accountService.getAccountByNumber(otherAccountNumber).getAccountId(), "TRANSFER_OUT", amount);
                 otherAccount.setBalance(otherAccount.getBalance() - amount);
-                accountService.updateAccount(otherAccount, otherAccount.getAccount_id());
+                accountService.updateAccount(otherAccount, otherAccount.getAccountId());
                 account.setBalance(account.getBalance() + amount);
-                transaction.setTransaction_type("TRANSFER_IN");
+                transaction.setTransactionType("TRANSFER_IN");
                 transactionService.addTransaction(otherTransaction);
             }
-            accountService.updateAccount(account, account.getAccount_id());
+            accountService.updateAccount(account, account.getAccountId());
             transactionService.addTransaction(transaction);
             System.out.println("Transaction completed.");
         }catch(SQLException e){

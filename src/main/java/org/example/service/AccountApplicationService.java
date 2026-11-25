@@ -23,7 +23,7 @@ public class AccountApplicationService {
         return accountApplicationDAO.findById(id);
     }
 
-    public boolean updateApplication(AccountApplication application, int approver_id) throws SQLException {
-        return accountApplicationDAO.update(application, approver_id);
+    public boolean updateApplication(AccountApplication application, int approverId) throws SQLException {
+        return accountApplicationDAO.update(application, approverId);
     }
 }

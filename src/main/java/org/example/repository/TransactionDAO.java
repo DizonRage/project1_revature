@@ -17,24 +17,24 @@ public class TransactionDAO {
 
         try(Connection conn = DatabaseConnectionFactory.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
-            ps.setInt(1, transaction.getAccount_id());
-            ps.setString(2, transaction.getTransaction_type());
+            ps.setInt(1, transaction.getAccountId());
+            ps.setString(2, transaction.getTransactionType());
             ps.setDouble(3, transaction.getAmount());
             try(ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
-                    int account_id = rs.getInt("account_id");
-                    transaction.setAccount_id(account_id);
-                    return account_id;
+                    int accountId = rs.getInt("account_id");
+                    transaction.setAccountId(accountId);
+                    return accountId;
                 }
             }throw new SQLException("Creating user failed, no ID obtained");
         }
     }
 
-    public Transaction findById(int transaction_id) throws SQLException{
+    public Transaction findById(int transactionId) throws SQLException{
         String sql = "SELECT * FROM transactions WHERE transaction_id = ?;";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)){
-            ps.setInt(1, transaction_id);
+            ps.setInt(1, transactionId);
             try (ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
                     return new Transaction(rs.getInt("transaction_id"), rs.getInt("account_id"), rs.getString("transaction_type"), rs.getDouble("amount"));
@@ -49,8 +49,8 @@ public class TransactionDAO {
         String sql = "UPDATE transactions SET account_id = ?, transaction_type = ?, amount = ? WHERE transaction_id = ?";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, transaction.getAccount_id());
-            ps.setString(2, transaction.getTransaction_type());
+            ps.setInt(1, transaction.getAccountId());
+            ps.setString(2, transaction.getTransactionType());
             ps.setDouble(3, transaction.getAmount());
             ps.setInt(4, id);
             return ps.executeUpdate() > 0;

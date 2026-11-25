@@ -14,8 +14,8 @@ public class AccountService {
         accountDAO = new AccountDAO();
     }
 
-    public int addAccount(Account account, int application_id) throws SQLException {
-        return accountDAO.create(account, application_id);
+    public int addAccount(Account account, int applicationId) throws SQLException {
+        return accountDAO.create(account, applicationId);
     }
 
     public Account getAccountById(int id) throws SQLException {
@@ -31,7 +31,7 @@ public class AccountService {
     }
 
     public boolean updateAccount(Account account, int id) throws SQLException {
-        if(accountDAO.findById(account.getAccount_id()) != null){
+        if(accountDAO.findById(account.getAccountId()) != null){
             return accountDAO.update(account, id);
         }
         return false;

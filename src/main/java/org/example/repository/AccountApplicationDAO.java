@@ -43,25 +43,25 @@ public class AccountApplicationDAO {
         }
     }
 
-    public boolean update(AccountApplication application, int approver_id) throws SQLException{
+    public boolean update(AccountApplication application, int approverId) throws SQLException{
         String sql = "UPDATE account_applications SET applicant_id = ?, approver_id = ?, status = ? WHERE application_id = ?";
 
         try(Connection conn = DatabaseConnectionFactory.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, application.getApplicant_id());
-            ps.setInt(2, approver_id);
+            ps.setInt(1, application.getApplicantId());
+            ps.setInt(2, approverId);
             ps.setString(3, application.getStatus());
-            ps.setInt(4, application.getApplication_id());
+            ps.setInt(4, application.getApplicationId());
             return ps.executeUpdate() > 0;
         }
 
     }
 
-    public boolean delete(int application_id) throws SQLException {
+    public boolean delete(int applicationId) throws SQLException {
         String sql = "DELETE FROM account_applications WHERE account_id = ?";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, application_id);
+            ps.setInt(1, applicationId);
             return ps.executeUpdate() > 0;
         }
     }
