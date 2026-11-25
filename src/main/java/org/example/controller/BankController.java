@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.exception.DataAccessException;
 import org.example.model.AccountApplication;
 import org.example.model.Account;
 import org.example.model.Transaction;
@@ -10,7 +11,6 @@ import org.example.service.TransactionService;
 import org.example.service.UserService;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class BankController {
@@ -55,7 +55,7 @@ public class BankController {
             Account account = accountService.getAccountById(accountService.addAccount(new Account(accountNumber, application.getAccountType(), balance), applicationId));
             System.out.println("Account created");
             System.out.println(account.toString());
-        }catch(SQLException e){
+        }catch(DataAccessException e){
             System.out.printf(e.getMessage());
         }
     }
@@ -72,7 +72,7 @@ public class BankController {
             }else{
                 System.out.println("Account does not exist");
             }
-        }catch(SQLException e){
+        }catch(DataAccessException e){
             System.out.printf(e.getMessage());
         }
 
@@ -81,7 +81,7 @@ public class BankController {
     public void handleCheckPersonal(){
         try{
             System.out.printf(userService.getUserById(login).toStringCustomer());
-        }catch(SQLException e){
+        }catch(DataAccessException e){
             System.out.printf(e.getMessage());
         }
 
@@ -98,7 +98,7 @@ public class BankController {
             }else{
                 System.out.printf("Account does not exist");
             }
-        }catch(SQLException e){
+        }catch(DataAccessException e){
             System.out.printf(e.getMessage());
         }
 
@@ -124,7 +124,7 @@ public class BankController {
             }else{
                 System.out.println("Account update failed");
             }
-        }catch(SQLException e){
+        }catch(DataAccessException e){
             System.out.printf(e.getMessage());
         }
 
@@ -141,7 +141,7 @@ public class BankController {
             }else{
                 System.out.printf("Account delete failed");
             }
-        }catch(SQLException e){
+        }catch(DataAccessException e){
             System.out.printf(e.getMessage());
         }
     }
@@ -164,7 +164,7 @@ public class BankController {
             User createdUser = userService.getUserById(userService.addUser(new User(username, password, firstName, lastName, email, role)));
             System.out.println("User created");
             System.out.println(createdUser.toString());
-        }catch(SQLException e){
+        }catch(DataAccessException e){
             System.out.printf(e.getMessage());
         }
 
@@ -186,7 +186,7 @@ public class BankController {
             User createdUser = userService.getUserById(userService.addUser(new User(username, password, firstName, lastName, email, "CUSTOMER")));
             System.out.println("User created");
             System.out.println(createdUser.toStringCustomer());
-        }catch(SQLException e){
+        }catch(DataAccessException e){
             System.out.printf(e.getMessage());
         }
 
@@ -200,7 +200,7 @@ public class BankController {
             User foundUser = userService.getUserById(id);
             System.out.println("User found");
             System.out.println(foundUser.toString());
-        }catch(SQLException e){
+        }catch(DataAccessException e){
             System.out.printf(e.getMessage());
         }
     }
@@ -217,7 +217,7 @@ public class BankController {
             status = loggedInUser.getRole();
             login = loggedInUser.getUserId();
             System.out.println("User login successful");
-        }catch(SQLException e){
+        }catch(DataAccessException e){
             System.out.printf(e.getMessage());
         }
     }
@@ -254,7 +254,7 @@ public class BankController {
             }else{
                 System.out.println("User update failed");
             }
-        }catch(SQLException e){
+        }catch(DataAccessException e){
             System.out.printf(e.getMessage());
         }
 
@@ -271,7 +271,7 @@ public class BankController {
             }else{
                 System.out.println("User delete failed");
             }
-        }catch(SQLException e){
+        }catch(DataAccessException e){
             System.out.printf(e.getMessage());
         }
     }
@@ -339,7 +339,7 @@ public class BankController {
             accountService.updateAccount(account, account.getAccountId());
             transactionService.addTransaction(transaction);
             System.out.println("Transaction completed.");
-        }catch(SQLException e){
+        }catch(DataAccessException e){
             System.out.printf(e.getMessage());
         }
     }
@@ -354,7 +354,7 @@ public class BankController {
                 System.out.println("Account found");
                 System.out.println(transaction.toString());
             }
-        }catch(SQLException e){
+        }catch(DataAccessException e){
             System.out.printf(e.getMessage());
         }
     }
@@ -380,7 +380,7 @@ public class BankController {
             System.out.println("Account Application Created");
 
 
-        }catch(SQLException e){
+        }catch(DataAccessException e){
             System.out.printf(e.getMessage());
         }
     }
@@ -395,7 +395,7 @@ public class BankController {
                 System.out.println("Account found");
                 System.out.printf(application.toString());
             }
-        }catch(SQLException e){
+        }catch(DataAccessException e){
             System.out.printf(e.getMessage());
         }
     }
@@ -435,7 +435,7 @@ public class BankController {
                     System.out.println("Application update failed");
                 }
             }
-        }catch(SQLException e){
+        }catch(DataAccessException e){
             System.out.printf(e.getMessage());
         }
     }

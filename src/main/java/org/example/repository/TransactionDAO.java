@@ -1,5 +1,6 @@
 package org.example.repository;
 
+import org.example.exception.DataAccessException;
 import org.example.model.Account;
 import org.example.model.Transaction;
 import org.example.model.User;
@@ -12,7 +13,7 @@ import java.sql.SQLException;
 
 public class TransactionDAO {
 
-    public int create(Transaction transaction) throws SQLException {
+    public int create(Transaction transaction) {
         String sql = "INSERT INTO transactions (account_id, transaction_type, amount) VALUES (?, ?, ?) RETURNING account_id;";
 
         try(Connection conn = DatabaseConnectionFactory.getConnection();
@@ -27,10 +28,12 @@ public class TransactionDAO {
                     return accountId;
                 }
             }throw new SQLException("Creating user failed, no ID obtained");
+        } catch (SQLException e) {
+            throw new DataAccessException("Failed to create transaction", e);
         }
     }
 
-    public Transaction findById(int transactionId) throws SQLException{
+    public Transaction findById(int transactionId) {
         String sql = "SELECT * FROM transactions WHERE transaction_id = ?;";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)){
@@ -42,10 +45,12 @@ public class TransactionDAO {
                 return null;
             }
 
+        } catch (SQLException e) {
+            throw new DataAccessException("Failed to find transaction", e);
         }
     }
 
-    public boolean update(Transaction transaction, int id) throws SQLException {
+    public boolean update(Transaction transaction, int id) {
         String sql = "UPDATE transactions SET account_id = ?, transaction_type = ?, amount = ? WHERE transaction_id = ?";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -54,15 +59,19 @@ public class TransactionDAO {
             ps.setBigDecimal(3, transaction.getAmount());
             ps.setInt(4, id);
             return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new DataAccessException("Failed to update transaction", e);
         }
     }
 
-    public boolean delete(int id) throws SQLException {
+    public boolean delete(int id) {
         String sql = "DELETE FROM transactions WHERE transaction_id = ?";
         try (Connection conn = DatabaseConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new DataAccessException("Failed to delete transaction", e);
         }
     }
 

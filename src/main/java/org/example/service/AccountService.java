@@ -3,7 +3,6 @@ package org.example.service;
 import org.example.repository.AccountDAO;
 import org.example.model.Account;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class AccountService {
@@ -14,30 +13,30 @@ public class AccountService {
         accountDAO = new AccountDAO();
     }
 
-    public int addAccount(Account account, int applicationId) throws SQLException {
+    public int addAccount(Account account, int applicationId) {
         return accountDAO.create(account, applicationId);
     }
 
-    public Account getAccountById(int id) throws SQLException {
+    public Account getAccountById(int id) {
         return accountDAO.findById(id);
     }
 
-    public Account getAccountByNumber(String number) throws SQLException {
+    public Account getAccountByNumber(String number) {
         return accountDAO.findByNumber(number);
     }
 
-    public List<Account> getAllAccounts() throws SQLException {
+    public List<Account> getAllAccounts() {
         return accountDAO.findAll();
     }
 
-    public boolean updateAccount(Account account, int id) throws SQLException {
+    public boolean updateAccount(Account account, int id) {
         if(accountDAO.findById(account.getAccountId()) != null){
             return accountDAO.update(account, id);
         }
         return false;
     }
 
-    public boolean removeAccount(int id) throws SQLException {
+    public boolean removeAccount(int id) {
         if(accountDAO.findById(id) != null){
             return accountDAO.delete(id);
         }

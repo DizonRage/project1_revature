@@ -3,7 +3,6 @@ package org.example.service;
 import org.example.repository.UserDAO;
 import org.example.model.User;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class UserService {
@@ -14,30 +13,30 @@ public class UserService {
         userDAO = new UserDAO();
     }
 
-    public int addUser(User user) throws SQLException {
+    public int addUser(User user) {
         return userDAO.create(user);
     }
 
-    public User login(String user, String pass)throws SQLException {
+    public User login(String user, String pass) {
         return userDAO.findByLogin(user, pass);
     }
 
-    public User getUserById(int id) throws SQLException {
+    public User getUserById(int id) {
         return userDAO.findById(id);
     }
 
-    public List<User> getAllUsers() throws SQLException {
+    public List<User> getAllUsers() {
         return userDAO.findAll();
     }
 
-    public boolean updateUser(User user, int id) throws SQLException {
+    public boolean updateUser(User user, int id) {
         if (userDAO.findById(id) != null) {
             return userDAO.update(user, id);
         }
         return false;
     }
 
-    public boolean removeUser(int id) throws SQLException {
+    public boolean removeUser(int id) {
         if(userDAO.findById(id) != null){
             return userDAO.delete(id);
         }

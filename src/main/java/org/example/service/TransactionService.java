@@ -5,7 +5,6 @@ import org.example.repository.UserDAO;
 import org.example.model.Transaction;
 import org.example.model.User;
 
-import java.sql.SQLException;
 
 public class TransactionService {
 
@@ -15,11 +14,11 @@ public class TransactionService {
         transactionDAO = new TransactionDAO();
     }
 
-    public int addTransaction(Transaction transaction) throws SQLException {
+    public int addTransaction(Transaction transaction) {
         return transactionDAO.create(transaction);
     }
 
-    public Transaction findTransaction(int id) throws SQLException {
+    public Transaction findTransaction(int id) {
         return transactionDAO.findById(id);
     }
 }
